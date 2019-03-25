@@ -53,4 +53,98 @@ searchFun('ds','22');
 let searchFun2:SearchFunc=function(src,m):boolean{//函数类型 boolean指定当前函数返回值的是布尔类型 这里也可以不指定 也会依据SearchFunc 检查返回类型
     return false
 }
-//Indexable Types
+//## Indexable Types ，only support string and number
+interface StringArray{
+    [index:number]:string
+}
+let myArray:StringArray=['Bob','F']
+interface NumberDictionary {
+    //  name: string;  error, the type of 'name' is not a subtype of the indexer 已经定义过了
+    length: number;    // ok, length is a number
+    [index: string]: number;
+  
+}
+//readonly array
+interface readonlyArray{
+    readonly [name:number]:number
+}
+let readonlyArray:readonlyArray=[11,111]
+//## Class Types 主要用于描述公共方法
+interface PersonInterface{//public side
+    name: string;
+    hello(name:string)//method
+}
+class Personin implements PersonInterface{
+    hello(name:'ddd'){
+
+    };
+    name: string;
+}
+//### static vs instance 
+//#### static conctructor 类不会检测静态部分
+//下面这个例子 static和instance都检测了 
+//感觉不是太理解
+interface ClockConstructor{
+    new (hour:number,minute:number):ClockInterface;//为了实现静态部分的检测
+}
+interface ClockInterface{//instance
+    track();
+}
+function createClock(ctor:ClockConstructor,hour:number,minute:number):ClockInterface{//这样会检测constructor
+    return new ctor(hour,minute);
+}
+class Clock implements ClockInterface{
+    constructor(h:number,m:number){
+
+    }
+    track(){
+
+    }
+}
+//## extending interfaces eg:copy the members of other interface
+interface Shape{
+    code:string
+}
+interface Square extends Shape{
+    name:string
+}
+let square=<Square>{};
+square.name="df";
+//combine
+interface Tree{
+    height:number
+}
+interface Follower{
+    width:number
+}
+interface Plant extends Tree,Follower{//multiple interface
+    kind:string
+}
+let plant=<Plant>{};
+plant.height=44;
+//## Hybrid Types
+interface Counter{
+    (name:string):string,
+    interval:number,
+    hello():void
+}
+function getCounter():Counter{
+    let count=<Counter>function(name:string){};//name??
+    count.interval=666;
+    count.hello=function(){};
+    return count;
+}
+//## interface extending Classess
+class Control{
+    private state:any//private or protected
+}
+interface SelectableControl extends Control{
+    selectOption():void
+}
+class Button extends Control implements SelectableControl{
+    selectOption(){}
+}
+class Image implements SelectableControl{
+    private state:any;
+    selectOption(){}
+}
