@@ -56,3 +56,22 @@ var deck = {
 };
 var createFun = deck.createCard();
 console.log(createFun());
+//### overloads return different types of objects based on the shape of arguments passed in 
+var suits = ['heart', 'spades', 'clubs'];
+function pickCard(x) {
+    if (typeof x == "object") {
+        return Math.floor(Math.random()) * x.length;
+    }
+    else if (typeof x == "number") {
+        var pickSuit = Math.floor(x / 12);
+        return {
+            suit: suits[pickSuit],
+            cards: x / 13
+        };
+    }
+}
+var myDeck = [{ suit: 'dis', card: 1 }];
+var pickCard1 = pickCard(myDeck);
+console.log(pickCard1);
+var pickCard2 = pickCard(11);
+console.log(pickCard2);

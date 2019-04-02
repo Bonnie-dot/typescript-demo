@@ -40,6 +40,7 @@ function buildNameTwo(name:string,...restOfName:string[]){
 }
 buildNameTwo('ddd','sdf','sdf','111');
 //### this es5是调用的是觉得的 es6是在创建时决定的、
+//ts 中绑定this
 interface Card{
     suit:string,
     card:number
@@ -60,3 +61,23 @@ let deck:Deck={
 }
 let createFun=deck.createCard();
 console.log(createFun());
+//### overloads return different types of objects based on the shape of arguments passed in 
+let suits=['heart','spades','clubs'];
+function pickCard(x:{suit:string,card:number}[]):number;
+function pickCard(x:number):{suit:string,card:number};
+function pickCard(x):any{
+    if(typeof x=="object"){
+        return Math.floor(Math.random())*x.length
+    }else if(typeof x=="number"){
+        let pickSuit=Math.floor(x/12);
+        return {
+            suit:suits[pickSuit],
+            cards:x/13
+        }
+    }
+}
+let myDeck=[{suit:'dis',card:1}];
+let pickCard1=pickCard(myDeck);
+console.log(pickCard1);
+let pickCard2=pickCard(11);
+console.log(pickCard2);
