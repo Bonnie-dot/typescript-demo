@@ -52,3 +52,25 @@ var FileAccess;
     // computed member
     FileAccess[FileAccess["G"] = "123".length] = "G";
 })(FileAccess || (FileAccess = {}));
+// ## Union enums and enum member types
+// There is a special subset of constant enum members that aren’t calculated: literal enum members. 
+// Enums at runtime
+(function (E) {
+    E[E["X"] = 2] = "X";
+    E[E["Y"] = 3] = "Y";
+    E[E["Z"] = 4] = "Z";
+})(E || (E = {}));
+function f(obj) {
+    return obj.X;
+}
+// Works, since 'E' has a property named 'X' which is a number.
+f(E);
+// ## Reverse mappings
+// In addition to creating an object with property names for members, numeric enums members also get a reverse mapping from enum values to enum names. 
+// Keep in mind that string enum members do not get a reverse mapping generated at all
+var Enum;
+(function (Enum) {
+})(Enum || (Enum = {}));
+var a = Enum.A;
+var nameofA = Enum[a];
+// One important difference between ambient and non-ambient enums is that, in regular enums, members that don’t have an initializer will be considered constant if its preceding enum member is considered constant. In contrast, an ambient (and non-const) enum member that does not have initializer is always considered computed.
